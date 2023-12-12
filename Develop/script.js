@@ -20,6 +20,49 @@ $(document).ready(function () {
   // attribute of each time-block be used to do this?
   //
   // TODO: Add code to display the current date in the header of the page.
-  let date = dayjs(new Date()).format('dddd, MMMM D[th]');
- $('#currentDay').text(date);
+  let today = dayjs();
+  $('#currentDay').text(dayjs(today).format('dddd, MMMM D[th]'));
+
+
+  for (let i = 9; i < 18; i++) {
+
+    let hour = 0;
+    if (i < 12) {
+      hour = i + "AM";
+    } else if (i === 12) {
+      hour = i + "PM";
+    } else {
+      hour = (i - 12) + "PM";
+    }
+
+    let timeBlockEl = $('<div>');
+    timeBlockEl.addClass('row time-block past');
+    timeBlockEl.attr('id', 'hour-' + i);
+
+    let hourEl = $('<div>');
+    hourEl.addClass('col-2 col-md-1 hour text-center py-3');
+    hourEl.text(hour);
+
+    let scheduleEl = $('<textarea>');
+    scheduleEl.addClass('col-8 col-md-10 description');
+    scheduleEl.attr('rows', '3');
+
+    let saveEl = $('<button>');
+    saveEl.addClass('btn saveBtn col-2 col-md-1');
+    saveEl.attr('aria-label', 'save');
+
+    let saveIcon = $('<i>');
+    saveIcon.addClass('fas fa-save');
+    saveIcon.attr('aria-hidden', 'true');
+
+    saveEl.append(saveIcon);
+    timeBlockEl.append(hourEl);
+    timeBlockEl.append(scheduleEl);
+    timeBlockEl.append(saveEl);
+
+    $('#container').append(timeBlockEl);
+  }
+
+
+
 });
