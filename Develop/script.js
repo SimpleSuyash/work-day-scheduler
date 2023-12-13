@@ -28,12 +28,19 @@ $(document).ready(function () {
 
 
 
-  let now = dayjs()
-  $('#currentDay').text(dayjs(now).format('dddd, MMMM Do'));
+  let now = dayjs();
   let currentHour = dayjs().hour();
+  $('#currentDay').text(dayjs(now).format('dddd, MMMM Do'));
+  
  
 
   for (let i = 9; i < 18; i++) {
+
+    let timeBlockEl = $('<div>');
+    let hourEl = $('<div>');
+    let scheduleEl = $('<textarea>');
+    let saveEl = $('<button>');
+    let saveIcon = $('<i>');
 
     let hour = 0;
     if (i < 12) {
@@ -44,10 +51,11 @@ $(document).ready(function () {
       hour = (i - 12) + "PM";
     }
 
-    let timeBlockEl = $('<div>');
+    
    
     if(i < currentHour){
       timeBlockEl.addClass('row time-block past');
+      scheduleEl.attr('readonly', true);
     }else if(i === currentHour){
       timeBlockEl.addClass('row time-block present');
     }else {
@@ -56,19 +64,19 @@ $(document).ready(function () {
 
     timeBlockEl.attr('id',  i);
 
-    let hourEl = $('<div>');
+    
     hourEl.addClass('col-2 col-md-1 hour text-center py-3');
     hourEl.text(hour);
 
-    let scheduleEl = $('<textarea>');
+    
     scheduleEl.addClass('col-8 col-md-10 description');
     scheduleEl.attr('rows', '3');
 
-    let saveEl = $('<button>');
+    
     saveEl.addClass('btn saveBtn col-2 col-md-1');
     saveEl.attr('aria-label', 'save');
 
-    let saveIcon = $('<i>');
+    
     saveIcon.addClass('fas fa-save');
     saveIcon.attr('aria-hidden', 'true');
 
