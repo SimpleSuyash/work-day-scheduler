@@ -28,8 +28,10 @@ $(document).ready(function () {
 
 
 
-  let todayDate = dayjs().today;
-  $('#currentDay').text(dayjs(todayDate).format('dddd, MMMM Do'));
+  let now = dayjs()
+  $('#currentDay').text(dayjs(now).format('dddd, MMMM Do'));
+  let currentHour = dayjs().hour();
+ 
 
   for (let i = 9; i < 18; i++) {
 
@@ -44,14 +46,15 @@ $(document).ready(function () {
 
     let timeBlockEl = $('<div>');
    
-    timeBlockEl.addClass('row time-block past');
-    // } else if (new Date(i) == now) {
-    //   timeBlockEl.addClass('row time-block present');
-    // } else {
-    //   timeBlockEl.addClass('row time-block future');
-    // }
+    if(i < currentHour){
+      timeBlockEl.addClass('row time-block past');
+    }else if(i === currentHour){
+      timeBlockEl.addClass('row time-block present');
+    }else {
+      timeBlockEl.addClass('row time-block future');
+    }
 
-    timeBlockEl.attr('id', 'hour-' + i);
+    timeBlockEl.attr('id',  i);
 
     let hourEl = $('<div>');
     hourEl.addClass('col-2 col-md-1 hour text-center py-3');
@@ -75,6 +78,7 @@ $(document).ready(function () {
     timeBlockEl.append(saveEl);
 
     $('#container').append(timeBlockEl);
+    
     
   }
 
