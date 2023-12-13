@@ -1,7 +1,12 @@
+
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
 $(document).ready(function () {
+  
+  dayjs.extend(window.dayjs_plugin_advancedFormat);
+
+
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
   // local storage. HINT: What does `this` reference in the click listener
@@ -20,6 +25,59 @@ $(document).ready(function () {
   // attribute of each time-block be used to do this?
   //
   // TODO: Add code to display the current date in the header of the page.
-  let date = dayjs(new Date()).format('dddd, MMMM D[th]');
- $('#currentDay').text(date);
+
+
+
+  let todayDate = dayjs().today;
+  $('#currentDay').text(dayjs(todayDate).format('dddd, MMMM Do'));
+
+  for (let i = 9; i < 18; i++) {
+
+    let hour = 0;
+    if (i < 12) {
+      hour = i + "AM";
+    } else if (i === 12) {
+      hour = i + "PM";
+    } else {
+      hour = (i - 12) + "PM";
+    }
+
+    let timeBlockEl = $('<div>');
+   
+    timeBlockEl.addClass('row time-block past');
+    // } else if (new Date(i) == now) {
+    //   timeBlockEl.addClass('row time-block present');
+    // } else {
+    //   timeBlockEl.addClass('row time-block future');
+    // }
+
+    timeBlockEl.attr('id', 'hour-' + i);
+
+    let hourEl = $('<div>');
+    hourEl.addClass('col-2 col-md-1 hour text-center py-3');
+    hourEl.text(hour);
+
+    let scheduleEl = $('<textarea>');
+    scheduleEl.addClass('col-8 col-md-10 description');
+    scheduleEl.attr('rows', '3');
+
+    let saveEl = $('<button>');
+    saveEl.addClass('btn saveBtn col-2 col-md-1');
+    saveEl.attr('aria-label', 'save');
+
+    let saveIcon = $('<i>');
+    saveIcon.addClass('fas fa-save');
+    saveIcon.attr('aria-hidden', 'true');
+
+    saveEl.append(saveIcon);
+    timeBlockEl.append(hourEl);
+    timeBlockEl.append(scheduleEl);
+    timeBlockEl.append(saveEl);
+
+    $('#container').append(timeBlockEl);
+    
+  }
+
+
+
 });
