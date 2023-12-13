@@ -2,6 +2,7 @@
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
 $(document).ready(function () {
+
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
   // local storage. HINT: What does `this` reference in the click listener
@@ -20,9 +21,11 @@ $(document).ready(function () {
   // attribute of each time-block be used to do this?
   //
   // TODO: Add code to display the current date in the header of the page.
-  let today = dayjs();
-  $('#currentDay').text(dayjs(today).format('dddd, MMMM D[th]'));
 
+
+
+  let todayDate = dayjs().today;
+  $('#currentDay').text(dayjs(todayDate).format('dddd, MMMM D[th]'));
 
   for (let i = 9; i < 18; i++) {
 
@@ -36,7 +39,14 @@ $(document).ready(function () {
     }
 
     let timeBlockEl = $('<div>');
-    timeBlockEl.addClass('row time-block past');
+    if (new Date(i) < now) {
+      timeBlockEl.addClass('row time-block past');
+    } else if (new Date(i) == now) {
+      timeBlockEl.addClass('row time-block present');
+    } else {
+      timeBlockEl.addClass('row time-block future');
+    }
+
     timeBlockEl.attr('id', 'hour-' + i);
 
     let hourEl = $('<div>');
