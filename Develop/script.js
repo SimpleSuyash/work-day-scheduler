@@ -3,7 +3,7 @@
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
 $(document).ready(function () {
-  
+
   dayjs.extend(window.dayjs_plugin_advancedFormat);
 
 
@@ -27,12 +27,12 @@ $(document).ready(function () {
   // TODO: Add code to display the current date in the header of the page.
 
 
-
+  let containerEl = $('#container');
   let now = dayjs();
   let currentHour = dayjs().hour();
   $('#currentDay').text(dayjs(now).format('dddd, MMMM Do'));
-  
- 
+
+
 
   for (let i = 9; i < 18; i++) {
 
@@ -51,32 +51,33 @@ $(document).ready(function () {
       hour = (i - 12) + "PM";
     }
 
-    
-   
-    if(i < currentHour){
+
+
+    if (i < currentHour) {
       timeBlockEl.addClass('row time-block past');
       scheduleEl.attr('readonly', true);
-    }else if(i === currentHour){
+      saveEl.attr('disabled', true);
+    } else if (i === currentHour) {
       timeBlockEl.addClass('row time-block present');
-    }else {
+    } else {
       timeBlockEl.addClass('row time-block future');
     }
 
-    timeBlockEl.attr('id',  i);
+    timeBlockEl.attr('id', i);
 
-    
+
     hourEl.addClass('col-2 col-md-1 hour text-center py-3');
     hourEl.text(hour);
 
-    
+
     scheduleEl.addClass('col-8 col-md-10 description');
     scheduleEl.attr('rows', '3');
 
-    
+
     saveEl.addClass('btn saveBtn col-2 col-md-1');
     saveEl.attr('aria-label', 'save');
 
-    
+
     saveIcon.addClass('fas fa-save');
     saveIcon.attr('aria-hidden', 'true');
 
@@ -85,11 +86,18 @@ $(document).ready(function () {
     timeBlockEl.append(scheduleEl);
     timeBlockEl.append(saveEl);
 
-    $('#container').append(timeBlockEl);
-    
-    
+    containerEl.append(timeBlockEl);
+
   }
 
+  containerEl.on('click', '.saveBtn', function (theEvent) {
+    alert(theEvent.target.parent());
+    var schedule = {
+      time: 'dd'
+
+    };
+
+  });
 
 
-});
+});//end of document.ready
