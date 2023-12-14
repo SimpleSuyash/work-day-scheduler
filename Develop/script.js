@@ -34,7 +34,7 @@ $(document).ready(function () {
 
 
 
-  for (let i = 9; i < 24; i++) {
+  for (let i = 1; i < 12; i++) {
 
     let timeBlockEl = $('<div>');
     let hourEl = $('<div>');
@@ -91,14 +91,15 @@ $(document).ready(function () {
   }
 
   containerEl.on('click', '.saveBtn', function (theEvent) {
-    let buttonPressedEl = $(theEvent.target);
+    let buttonPressedEl = $(theEvent.target.closest('button'));
     let scheduleEl = buttonPressedEl.prev();
     let taskBarEl= buttonPressedEl.parent();
     let taskTimeEl = taskBarEl.children().first();
-
+    let task = scheduleEl.val();
       
 
-    if($.trim(scheduleEl.val()) != ""){
+    // if($.trim(scheduleEl.val()) != ""){
+      if(task){
       let taskScheduled = {
         'time': taskTimeEl.text(),
         'task': scheduleEl.val(),
@@ -116,6 +117,7 @@ $(document).ready(function () {
     }
     
   });
+  
 
   function saveSchedule(){
       localStorage.setItem('schedule', JSON.stringify(schedules));
