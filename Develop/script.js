@@ -95,23 +95,18 @@ $(document).ready(function () {
     let scheduleEl = buttonPressedEl.prev();
     let taskBarEl= buttonPressedEl.parent();
     let taskTimeEl = taskBarEl.children().first();
-    let task = scheduleEl.val();
-      
-
-    // if($.trim(scheduleEl.val()) != ""){
-      if(task){
+    let task = scheduleEl.val().trim();
+    
+    if (task) {
       let taskScheduled = {
         'time': taskTimeEl.text(),
-        'task': scheduleEl.val(),
+        'task': scheduleEl.val().trim(),
       };
       schedules.push(taskScheduled);
-      scheduleEl.val("") ;
+      scheduleEl.val("");
       saveSchedule();
-
-    }
-    // else if($.trim(scheduleEl.val()) === )
-    
-    else{
+    } else {
+      scheduleEl.val('');
       $(scheduleEl).attr('placeholder', '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Your task is empty. The Schedule could not be saved. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
       setTimeout(() => scheduleEl.attr('placeholder', ''), 3000);
     }
