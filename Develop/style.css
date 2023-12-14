@@ -52,9 +52,13 @@ textarea {
   background-color: #06aed5;
   color: white;
 }
-
-.saveBtn i:hover {
-  font-size: 20px;
+.saveBtn:hover{
+  background-color: #06aed5;
+  color: white;
+  border-left: 1px solid black;
+  font-size: 30px;
   transition: all 0.3s ease-in-out;
 }
+
+
 
