@@ -3,7 +3,7 @@
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
 $(document).ready(function () {
-
+ 
   dayjs.extend(window.dayjs_plugin_advancedFormat);
 
 
@@ -26,7 +26,7 @@ $(document).ready(function () {
   //
   // TODO: Add code to display the current date in the header of the page.
 
-
+  let schedules = [];
   let containerEl = $('#container');
   let now = dayjs();
   let currentHour = dayjs().hour();
@@ -34,7 +34,7 @@ $(document).ready(function () {
 
 
 
-  for (let i = 9; i < 18; i++) {
+  for (let i = 9; i < 24; i++) {
 
     let timeBlockEl = $('<div>');
     let hourEl = $('<div>');
@@ -91,13 +91,36 @@ $(document).ready(function () {
   }
 
   containerEl.on('click', '.saveBtn', function (theEvent) {
-    alert(theEvent.target.parent());
-    var schedule = {
-      time: 'dd'
+    let buttonPressedEl = $(theEvent.target);
+    let scheduleEl = buttonPressedEl.prev();
+    let taskBarEl= buttonPressedEl.parent();
+    let taskTimeEl = taskBarEl.children().first();
 
-    };
+      
 
+    if($.trim(scheduleEl.val()) != ""){
+      let taskScheduled = {
+        'time': taskTimeEl.text(),
+        'task': scheduleEl.val(),
+      };
+      schedules.push(taskScheduled);
+      scheduleEl.val("") ;
+      saveSchedule();
+
+    }
+    // else if($.trim(scheduleEl.val()) === )
+    
+    else{
+      $(scheduleEl).attr('placeholder', '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Your task is empty. The Schedule could not be saved. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+      setTimeout(() => scheduleEl.attr('placeholder', ''), 3000);
+    }
+    
   });
+
+  function saveSchedule(){
+      localStorage.setItem('schedule', JSON.stringify(schedules));
+  }
+
 
 
 });//end of document.ready
