@@ -1,6 +1,12 @@
+:root{
+  --yellowColour: #f3f1a2;
+}
+
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
+  text-align: center;
+ 
 }
 
 textarea {
@@ -59,6 +65,16 @@ textarea {
   font-size: 30px;
   transition: all 0.3s ease-in-out;
 }
+.custom-header{
+  background: var(--yellowColour);
+  font-family: 'Kalnia', serif;
+  border-bottom: 0.5rem  outset #77dd77;
+}
+span{
+   opacity: 0.5;
+}
+
+
 
 
 
