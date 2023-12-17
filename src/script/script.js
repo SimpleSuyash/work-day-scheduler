@@ -1,23 +1,10 @@
 
+/*global $, window, document*/
+
 //for date ordinal, advancedFormat plugin is required
 dayjs.extend(window.dayjs_plugin_advancedFormat);
 
 
-// prevents the code from running until the browser has finished rendering all the elements in the html
-$(document).ready(function () {
-  init();
-});
-
-// This function is being called below and will run when the page loads.
-function init() {
-  //renders all the html elements
-  loadUI();
-  // gets stored schedules from localStorage
-  let storedSchedules = readSchedulesFromStorage();
-    
-  // renders saved schedules to the DOM
-  renderSchedules(storedSchedules);
-}
 
 function loadUI() {
   //displays today's formatted date
@@ -25,15 +12,15 @@ function loadUI() {
 
   const currentHour = dayjs().hour();
   const containerEl = $('#container');
-  
+
   for (let i = 9; i < 18; i++) {
     const timeBlockEl = $('<div>');
     const hourEl = $('<div>');
     const scheduleEl = $('<textarea>');
     const saveEl = $('<button>');
     const saveIcon = $('<i>');
-    let hourText = dayjs().hour(i).format('hA');//hours like: 9AM, 5PM
-    let hour = dayjs().hour(i).format('H');// hours like: 9, 17
+    const hourText = dayjs().hour(i).format('hA');//hours like: 9AM, 5PM
+    const hour = dayjs().hour(i).format('H');// hours like: 9, 17
 
     if (hour < currentHour) {
       //when the given time is before the current hour
@@ -52,7 +39,7 @@ function loadUI() {
     }
     //time block/row
     timeBlockEl.attr('id', hour);
-    
+
     //hour column
     hourEl.addClass('col-2 col-md-1 hour text-center py-3');
     hourEl.text(hourText);
@@ -79,17 +66,6 @@ function loadUI() {
   }
 }
 
-
-function renderSchedules(schedules) {
-  //going thru each items in the given schedules array
-  schedules.forEach((schedule)=>{
-    //selects textarea element that have attribute data-hour = given time
-    let scheduleEl = $(`textarea[data-hour = ${schedule.time}]`);
-    //setting schedule element value to matched item(schedule) in the array's task value
-    scheduleEl.val(schedule.task);
-  });
-
-}
 // Reads projects from local storage and returns array of schedule objects.
 // Returns an empty array ([]) if there aren't any schedules.
 function readSchedulesFromStorage() {
@@ -101,12 +77,32 @@ function readSchedulesFromStorage() {
     schedules = [];
   }
   return schedules;
+} 
+function renderSchedules(schedules) {
+  //going thru each items in the given schedules array
+  schedules.forEach((schedule) => {
+    //selects textarea element that have attribute data-hour = given time
+    const scheduleEl = $(`textarea[data-hour = ${schedule.time}]`);
+    //setting schedule element value to matched item(schedule) in the array's task value
+    scheduleEl.val(schedule.task);
+  });
 }
+
+// Takes an array of schedules and saves them in localStorage.
+function saveSchedulesToStorage(schedules) {
+
+  localStorage.setItem('schedules', JSON.stringify(schedules));
+  const saveMessageEl = $('#save-result');
+  // displaying the save successful message on top of the time blocks
+  saveMessageEl.html('Appontment Added to <span>localstorage </span><i class="fa-solid fa-check fa-beat fa-xl"></i>');
+  setTimeout(() => saveMessageEl.empty(), 3000);
+}
+
 //disabling the enter in the schedule textarea
 //since only one event can be saved for any given hour
 //keycode 13 is enter key
-function handleEnter(theEvent){
-  if(theEvent.keyCode === 13 ){
+function handleEnter(theEvent) {
+  if (theEvent.keyCode === 13) {
     theEvent.preventDefault();
     return false;
   }
@@ -114,47 +110,47 @@ function handleEnter(theEvent){
 
 //defining the click event on save button
 function handleSave(theEvent) {
-  let schedules = readSchedulesFromStorage();
+  const schedules = readSchedulesFromStorage();
   // closet('button') helps fire event when the inside icon is pressed
-  let buttonPressedEl = $(theEvent.target.closest('button'));
+  const buttonPressedEl = $(theEvent.target.closest('button'));
   //getting previous sibling of the clicked button
-  let scheduleEl = buttonPressedEl.prev();
+  const scheduleEl = buttonPressedEl.prev();
   //trimming any white space before and after
-  let task = scheduleEl.val().trim();
-  let time = scheduleEl.attr('data-hour');
+  const task = scheduleEl.val().trim();
+  const time = scheduleEl.attr('data-hour');
   //to track if for any given hour, the schedule already exist in the storage
   let scheduleExistAlready = false;
   if (task) {
     //if schedule exists make scheduledTask object
-    let scheduledTask = {
+    const scheduledTask = {
       'time': time,
       'task': task
     };
     //for all the schedules in the storage
     //if time in the storage matches to the schedule element time
     //change the schedule in the storage with that of the schedule element
-    schedules.forEach((schedule)=>{
-      if(schedule.time==scheduledTask.time){
+    schedules.forEach((schedule) => {
+      if (schedule.time == scheduledTask.time) {
         //when a schedule already exist for the hour
         // just update the new schedule
         schedule.task = scheduledTask.task;
         scheduleExistAlready = true;
       }
     });
-    if(!scheduleExistAlready){
+    if (!scheduleExistAlready) {
       //if no schedules found in the storage for the given hours
       //add the schedule
       schedules.push(scheduledTask);
     }
     //save all the schedules to storage
     saveSchedulesToStorage(schedules);
-    let storedSchedules = readSchedulesFromStorage();
+    const storedSchedules = readSchedulesFromStorage();
     //reseting the schedule element
     scheduleEl.val("");
     //filling the schedule in schedule elements form the storage
     renderSchedules(storedSchedules);
-  //when the schedule element's value is empty 
-  //or when there is no schedule but user pressed save button
+    //when the schedule element's value is empty 
+    //or when there is no schedule but user pressed save button
   } else {
     //schedule element textarea may have whitespaces, 
     //so making it empty, so placehoder can be displayed as an error message
@@ -164,18 +160,34 @@ function handleSave(theEvent) {
   }
 };
 
-// Takes an array of schedules and saves them in localStorage.
-function saveSchedulesToStorage(schedules) {
-  
-    localStorage.setItem('schedules', JSON.stringify(schedules));
-    let saveMessageEl = $('#save-result');
-    // displaying the save successful message on top of the time blocks
-    saveMessageEl.html('Appontment Added to <span>localstorage </span><i class="fa-solid fa-check fa-beat fa-xl"></i>');
-    setTimeout(() => saveMessageEl.empty(), 3000);
-  }
-
-  
 
 
+// This function is being called below and will run when the page loads.
+function init() {
+  //renders all the html elements
+  loadUI();
+  // gets stored schedules from localStorage
+  const storedSchedules = readSchedulesFromStorage();
 
-  
+  // renders saved schedules to the DOM
+  renderSchedules(storedSchedules);
+}
+
+// prevents the code from running until the browser has finished rendering all the elements in the html
+$(document).ready(function () {
+  init();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
