@@ -3,16 +3,18 @@
 
 //for date ordinal, advancedFormat plugin is required
 dayjs.extend(window.dayjs_plugin_advancedFormat);
-
-
+//getting header date
+const todayEl= $('#currentDay');
+//getting save successful message element
+const saveMessageEl = $('#save-result');
+//getting container
+const containerEl = $('#container');
 
 function loadUI() {
-  //displays today's formatted date
-  $('#currentDay').text(dayjs().format('dddd, MMMM Do'));
-
   const currentHour = dayjs().hour();
-  const containerEl = $('#container');
-
+  //displays today's formatted date
+  todayEl.text(dayjs().format('dddd, MMMM Do'));
+  
   for (let i = 9; i < 18; i++) {
     const timeBlockEl = $('<div>');
     const hourEl = $('<div>');
@@ -50,8 +52,9 @@ function loadUI() {
     //attaching the enter event
     scheduleEl.on('keydown', handleEnter);
     //save button column
-    saveEl.addClass('btn saveBtn col-2 col-md-1');
+    saveEl.addClass('saveBtn col-2 col-md-1');
     saveEl.attr('aria-label', 'save');
+  
     //save icon inside the save button
     saveIcon.addClass('fas fa-save');
     saveIcon.attr('aria-hidden', 'true');
@@ -90,9 +93,10 @@ function renderSchedules(schedules) {
 
 // Takes an array of schedules and saves them in localStorage.
 function saveSchedulesToStorage(schedules) {
-
+  
   localStorage.setItem('schedules', JSON.stringify(schedules));
-  const saveMessageEl = $('#save-result');
+  //scrolls to the top of the page, so that save successful message is visible
+  $(window).scrollTop(0);
   // displaying the save successful message on top of the time blocks
   saveMessageEl.html('Appontment Added to <span>localstorage </span><i class="fa-solid fa-check fa-beat fa-xl"></i>');
   setTimeout(() => saveMessageEl.empty(), 3000);
@@ -155,7 +159,7 @@ function handleSave(theEvent) {
     //schedule element textarea may have whitespaces, 
     //so making it empty, so placehoder can be displayed as an error message
     scheduleEl.val('');
-    $(scheduleEl).attr('placeholder', '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Your task is empty. The Schedule could not be saved. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+    scheduleEl.attr('placeholder', '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Your task is empty. The Schedule could not be saved. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
     setTimeout(() => scheduleEl.attr('placeholder', ''), 3000);
   }
 };
