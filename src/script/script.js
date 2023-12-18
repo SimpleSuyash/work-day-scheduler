@@ -32,6 +32,7 @@ function loadUI() {
       scheduleEl.attr('readonly', true);
       //save button also disabling
       saveEl.attr('disabled', true);
+      saveEl.addClass('unHover');
     } else if (hour == currentHour) {
       //when the given hour is same as the current hour
       timeBlockEl.addClass('row time-block present');
@@ -58,6 +59,7 @@ function loadUI() {
     //save icon inside the save button
     saveIcon.addClass('fas fa-save');
     saveIcon.attr('aria-hidden', 'true');
+    
 
     //appedning the elements to their respective parents
     saveEl.append(saveIcon);
