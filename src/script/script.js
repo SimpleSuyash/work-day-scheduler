@@ -48,8 +48,7 @@ function loadUI() {
     hourEl.text(hourText);
     // schedule/task column
     scheduleEl.addClass('col-8 col-md-10 description');
-    scheduleEl.attr('rows', '3');
-    scheduleEl.attr('data-hour', hourText);
+    scheduleEl.attr({rows: '3', 'data-hour': hourText, name: 'schedule'});
     //attaching the enter event
     scheduleEl.on('keydown', handleEnter);
     //save button column
