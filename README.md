@@ -51,4 +51,7 @@ Day.js is a lightweight alternative to Moment with almost the same functionality
 ## Link to the deployed application
 [Link to deployed Work Day Scheduler application](https://simplesuyash.github.io/work-day-scheduler/)
 
-
+## Same application, different method
+For learning purpose, I later tried the other method of creating the application. The other application maybe more complicated syntax and concept wise, but involves a lot less dom traversing.      
+[Link to deployed Work Day Planner application](https://simplesuyash.github.io/work-day-planner/)   
+[Link to Work Day Planner repo](https://github.com/SimpleSuyash/work-day-planner)   
