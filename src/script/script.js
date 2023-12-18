@@ -15,7 +15,7 @@ function loadUI() {
   //displays today's formatted date
   todayEl.text(dayjs().format('dddd, MMMM Do'));
   
-  for (let i = 9; i < 18; i++) {
+  for (let i = 9; i < 24; i++) {
     const timeBlockEl = $('<div>');
     const hourEl = $('<div>');
     const scheduleEl = $('<textarea>');
@@ -92,13 +92,19 @@ function renderSchedules(schedules) {
 }
 
 // Takes an array of schedules and saves them in localStorage.
-function saveSchedulesToStorage(schedules) {
-  
+function saveSchedulesToStorage(schedules, toSaveOrDelete='save') {
+ 
   localStorage.setItem('schedules', JSON.stringify(schedules));
   //scrolls to the top of the page, so that save successful message is visible
   $(window).scrollTop(0);
-  // displaying the save successful message on top of the time blocks
-  saveMessageEl.html('Appontment Added to <span>localstorage </span><i class="fa-solid fa-check fa-beat fa-xl"></i>');
+  if(toSaveOrDelete == 'save'){
+    // displaying the save successful message on top of the time blocks
+    saveMessageEl.html('The schedule is added to the <span>localstorage </span><i class="fa-solid fa-check fa-beat fa-xl"></i>');
+  }else{
+    // displaying the save successful message on top of the time blocks
+    saveMessageEl.html('The schedule is removed from the <span>localstorage </span><i class="fa-solid fa-check fa-beat fa-xl"></i>');
+  }
+ 
   setTimeout(() => saveMessageEl.empty(), 3000);
 }
 
@@ -114,7 +120,7 @@ function handleEnter(theEvent) {
 
 //defining the click event on save button
 function handleSave(theEvent) {
-  const schedules = readSchedulesFromStorage();
+  let schedules = readSchedulesFromStorage();
   // closet('button') helps fire event when the inside icon is pressed
   const buttonPressedEl = $(theEvent.target.closest('button'));
   //getting previous sibling of the clicked button
@@ -124,45 +130,62 @@ function handleSave(theEvent) {
   const time = scheduleEl.attr('data-hour');
   //to track if for any given hour, the schedule already exist in the storage
   let scheduleExistAlready = false;
-  if (task) {
-    //if schedule exists make scheduledTask object
-    const scheduledTask = {
-      'time': time,
-      'task': task
-    };
+ 
+  if (task) {//when user typed sth as a schedule
     //for all the schedules in the storage
     //if time in the storage matches to the schedule element time
     //change the schedule in the storage with that of the schedule element
-    schedules.forEach((schedule) => {
-      if (schedule.time == scheduledTask.time) {
+    schedules.forEach((schedule ) => {
+      if (schedule.time == time) {
         //when a schedule already exist for the hour
         // just update the new schedule
-        schedule.task = scheduledTask.task;
+        schedule.task = task;
         scheduleExistAlready = true;
       }
     });
     if (!scheduleExistAlready) {
       //if no schedules found in the storage for the given hours
       //add the schedule
-      schedules.push(scheduledTask);
+      schedules.push({time, task});
     }
     //save all the schedules to storage
     saveSchedulesToStorage(schedules);
-    const storedSchedules = readSchedulesFromStorage();
     //reseting the schedule element
     scheduleEl.val("");
-    //filling the schedule in schedule elements form the storage
-    renderSchedules(storedSchedules);
-    //when the schedule element's value is empty 
-    //or when there is no schedule but user pressed save button
-  } else {
-    //schedule element textarea may have whitespaces, 
-    //so making it empty, so placehoder can be displayed as an error message
-    scheduleEl.val('');
-    scheduleEl.attr('placeholder', '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Your task is empty. The Schedule could not be saved. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-    setTimeout(() => scheduleEl.attr('placeholder', ''), 3000);
+    
+  //when the schedule element's value is empty 
+  //or when there is no schedule but user pressed save button
+  }else {  //user typed empty string
+    //this serves as the delete function
+    //if there was a task scheduled before 
+    //and now user is replacing with empty string
+    let theExistingSchedule;
+    schedules.forEach((schedule) => {
+      if (schedule.time == time) {
+        //finding the existing schedule
+        theExistingSchedule = schedule;
+        scheduleExistAlready=true;
+      }
+    });
+    if(scheduleExistAlready){//when user typed empty string, but previous schedule exists
+      //creating a new schedules without the previously stored schedule
+      schedules = schedules.filter(schedule => schedule != theExistingSchedule);
+      // save all the schedules to storage
+      saveSchedulesToStorage(schedules, 'R');
+      scheduleEl.val("");
+
+    }else {//when user typed empty string, and no previous schedule exists
+      //schedule element textarea may have whitespaces, 
+      //so making it empty, so placehoder can be displayed as an error message
+      scheduleEl.val('');
+      scheduleEl.attr('placeholder', '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Your task is empty. The Schedule could not be saved. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+      setTimeout(() => scheduleEl.attr('placeholder', ''), 3000);
+    }
   }
-};
+  const storedSchedules = readSchedulesFromStorage();
+  //filling the schedule in schedule elements form the storage
+  renderSchedules(storedSchedules);
+}//end of handlesave
 
 
 
@@ -181,17 +204,3 @@ function init() {
 $(document).ready(function () {
   init();
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
