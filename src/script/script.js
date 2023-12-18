@@ -15,7 +15,7 @@ function loadUI() {
   //displays today's formatted date
   todayEl.text(dayjs().format('dddd, MMMM Do'));
   
-  for (let i = 9; i < 24; i++) {
+  for (let i = 9; i < 18; i++) {
     const timeBlockEl = $('<div>');
     const hourEl = $('<div>');
     const scheduleEl = $('<textarea>');
