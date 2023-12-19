@@ -1,6 +1,3 @@
-
-/*global $, window, document*/
-
 //for date ordinal, advancedFormat plugin is required
 dayjs.extend(window.dayjs_plugin_advancedFormat);
 //getting header date
