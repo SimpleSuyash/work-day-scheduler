@@ -45,7 +45,7 @@ The application uses the starter code from the following link:
 
 
 ## Caution
-Day.js is a lightweight alternative to Moment with almost the same functionality. But to use date ordinal (31st, 17th, etc), the AdvancedFormat plugin is required,so make sure to include the cdn link in the script tag. 
+Day.js is a lightweight alternative to Moment with almost the same functionality. But to use date ordinal (31st, 17th, etc), the AdvancedFormat plugin is required, so make sure to include the cdn link in the script tag. 
 
 
 ## Link to the deployed application
