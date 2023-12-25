@@ -78,7 +78,8 @@ $(document).ready(function () {
     let schedules = localStorage.getItem('schedules');
     if (schedules) {
       //if schedules array is not null
-      schedules = JSON.parse(localStorage.getItem("schedules"));
+      schedules = JSON.parse(schedules);
+      // schedules = JSON.parse(localStorage.getItem("schedules"));
     } else {
       schedules = [];
     }
