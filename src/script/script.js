@@ -186,9 +186,8 @@ $(document).ready(function () {
         setTimeout(() => scheduleEl.attr('placeholder', ''), 3000);
       }
     }
-    const storedSchedules = readSchedulesFromStorage();
     //filling the schedule in schedule elements form the storage
-    renderSchedules(storedSchedules);
+    renderSchedules(schedules);
   }//end of handlesave
 
 
